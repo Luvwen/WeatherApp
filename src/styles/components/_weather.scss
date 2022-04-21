@@ -39,7 +39,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
+  width: 20%;
   height: 10vh;
 }
 
@@ -47,8 +47,7 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  width: 90%;
-
+  width: 20%;
   border-radius: 30px;
 }
 
@@ -110,9 +109,40 @@ img {
   width: 100%;
   text-align: center;
   padding-top: 100px;
+  font-size: 3em;
 }
 
 .warning-container__text {
   font-size: 2em;
   font-weight: bolder;
+}
+
+@media (max-width: 908px)  {
+  .weather-city{
+    width: 25%;
+    height: 10vh;
+  }
+  
+  .weather-container-stats {
+    width: 25%;
+    border-radius: 30px;
+  }
+}
+
+@media (max-width: 635px) {
+  .weather-city{
+    width: 45%;
+    height: 10vh;
+  }
+  
+  .weather-container-stats {
+    width: 40%;
+    border-radius: 30px;
+  }
+
+  .warning-container {
+    padding-top: 100px;
+    font-size: 2em;
+  }
+  
 }

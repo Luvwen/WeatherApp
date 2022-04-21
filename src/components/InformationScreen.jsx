@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import sun from '../assets/img/sun.png';
 import { useForm } from '../hooks/useForm';
 
 var dayjs = require('dayjs');
@@ -13,22 +12,25 @@ export const InformationScreen = () => {
 
   const [weather, setWeather] = useState({});
 
-  const handleSearch = async () => {
-    const apiKey = '26a6cca3bab20a17b7667a8ddef2ec62';
+  // Fetch data from Weather api
 
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${apiKey}`;
+  const handleSearch = () => {
+    const apiKey = process.env.REACT_APP_WEATHERAPP_KEY;
 
-    await fetch(url)
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${apiKey}`;
+
+    fetch(url)
       .then((result) => result.json())
       .then((data) => {
         setWeather(data);
-        console.log(data);
         reset();
       });
   };
 
+  // Change background color
   const body = document.getElementById('body');
-  if (weather.weather) {
+
+  if (weather?.weather) {
     if (weather.weather[0].main === 'Clouds') {
       body.classList.add('clear');
       body.classList.remove('rainy');
@@ -52,11 +54,7 @@ export const InformationScreen = () => {
       body.classList.remove('clear');
       body.classList.remove('rainy');
       body.classList.remove('mist');
-    } else {
-      console.log('f');
     }
-  } else {
-    console.log('no existe');
   }
 
   return (
@@ -107,9 +105,15 @@ export const InformationScreen = () => {
           </div>
         </div>
       ) : (
-        <div className='warning-container'>
-          <h3 className='warning-container__text'>Ingrese una ciudad</h3>
-        </div>
+        <>
+          {weather?.message ? (
+            <div className='warning-container'>
+              City not found please try again
+            </div>
+          ) : (
+            <div className='warning-container'></div>
+          )}
+        </>
       )}
     </div>
   );
