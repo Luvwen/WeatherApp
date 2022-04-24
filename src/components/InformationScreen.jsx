@@ -17,7 +17,7 @@ export const InformationScreen = () => {
   const handleSearch = () => {
     const apiKey = process.env.REACT_APP_WEATHERAPP_KEY;
 
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${apiKey}`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${apiKey}`;
 
     fetch(url)
       .then((result) => result.json())
