@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useForm } from '../hooks/useForm';
 
@@ -11,66 +11,43 @@ export const InformationScreen = () => {
   const { country } = formValues;
 
   const [weather, setWeather] = useState({});
-
-  // Fetch data from Weather api
+  const [backgroundImage, setBackgroundImage] = useState('');
 
   const handleSearch = () => {
     const apiKey = process.env.REACT_APP_WEATHERAPP_KEY;
-
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${country}&units=metric&appid=${apiKey}`;
 
     fetch(url)
       .then((result) => result.json())
       .then((data) => {
+        const { main } = data.weather[0];
+        const climateWord = main.toLowerCase();
+        setBackgroundImage(climateWord);
         setWeather(data);
         reset();
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
-  // Change background color
-  const body = document.getElementById('body');
-
-  if (weather?.weather) {
-    if (weather.weather[0].main === 'Clouds') {
-      body.classList.add('clear');
-      body.classList.remove('rainy');
-      body.classList.remove('mist');
-      body.classList.remove('snow');
-    } else if (weather.weather[0].main === 'Rain') {
-      body.classList.add('rainy');
-      body.classList.remove('clear');
-      body.classList.remove('mist');
-      body.classList.remove('snow');
-    } else if (
-      weather.weather[0].main === 'Mist' ||
-      weather.weather[0].main === 'Fog'
-    ) {
-      body.classList.add('mist');
-      body.classList.remove('clear');
-      body.classList.remove('rainy');
-      body.classList.remove('snow');
-    } else if (weather.weather[0].main === 'Snow') {
-      body.classList.add('snow');
-      body.classList.remove('clear');
-      body.classList.remove('rainy');
-      body.classList.remove('mist');
-    }
-  }
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    handleSearch();
+  };
 
   return (
-    <div className='general-wrapper'>
+    <div className={`general-wrapper ${backgroundImage}`}>
       <div className='weather__search'>
         <h1 className='weather__title'>Search location</h1>
-        <input
-          type='text'
-          name='country'
-          value={country}
-          className='weather__input '
-          onChange={handleInputChange}
-        />
-        <button className='btn btn-primary' onClick={handleSearch}>
-          Search
-        </button>
+        <form className='search-form' onSubmit={handleSubmit}>
+          <input
+            type='text'
+            name='country'
+            value={country}
+            className='weather__input '
+            onChange={handleInputChange}
+          />
+          <button className='btn btn-primary search-button'>Search</button>
+        </form>
       </div>
       {weather.weather ? (
         <div className='weather-container'>
